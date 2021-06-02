@@ -18,9 +18,9 @@ MODEL_NAME=$DEPLOYMENT_NAME-model
 ENDPOINT_CONFIG_NAME=$DEPLOYMENT_NAME-endpoint-config
 ENDPOINT_NAME=$DEPLOYMENT_NAME-endpoint
 
-aws sagemaker delete-endpoint --endpoint-name $ENDPOINT_NAME | python -c "import json, sys; print(json.load(sys.stdin))"
-aws sagemaker delete-endpoint-config --endpoint-config-name $ENDPOINT_CONFIG_NAME | python -c "import json, sys; print(json.load(sys.stdin))"
-aws sagemaker delete-model --model-name $MODEL_NAME | python -c "import json, sys; print(json.load(sys.stdin))"
+aws sagemaker delete-endpoint --endpoint-name $ENDPOINT_NAME | python get_json_value.py
+aws sagemaker delete-endpoint-config --endpoint-config-name $ENDPOINT_CONFIG_NAME | python get_json_value.py
+aws sagemaker delete-model --model-name $MODEL_NAME | python get_json_value.py
 
 # Use this command to delete the ECR repository
 #aws ecr delete-repository --repository-name $MODEL_REPO --force

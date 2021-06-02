@@ -1,0 +1,9 @@
+{
+  "region": "us-west2",
+  "instance_type": "ml.t2.medium",
+  "initial_instance_count": 1,
+  "timeout": 60,
+  "enable_data_capture": false,
+  "data_capture_s3_prefix": "s3://bucket-name/optional/predix",
+  "data_capture_sample_percent": 100
+}

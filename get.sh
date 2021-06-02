@@ -15,4 +15,4 @@ fi
 
 ENDPOINT_NAME=$DEPLOYMENT_NAME-endpoint
 
-aws sagemaker describe-endpoint --endpoint-name $DEPLOYMENT_NAME | python -c "import json, sys; print(json.load(sys.stdin))"
+aws sagemaker describe-endpoint --endpoint-name $DEPLOYMENT_NAME | python get_json_value.py
