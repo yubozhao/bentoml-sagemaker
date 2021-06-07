@@ -13,6 +13,8 @@ else
   exit 1
 fi
 
-ENDPOINT_NAME=$DEPLOYMENT_NAME-endpoint
+echo "Get resource names"
+read -r MODEL_REPO_NAME MODEL_NAME ENDPOINT_CONFIG_NAME ENDPOINT_NAME <<<$(python sagemaker/generate_resource_names.py $DEPLOYMENT_NAME)
 
-aws sagemaker describe-endpoint --endpoint-name $DEPLOYMENT_NAME | python get_json_value.py
+echo "Get Sagemaker endpoint description"
+aws sagemaker describe-endpoint --endpoint-name $ENDPOINT_NAME | python get_json_value_from_return_struct.py

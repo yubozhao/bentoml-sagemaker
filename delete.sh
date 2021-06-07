@@ -13,14 +13,12 @@ else
   exit 1
 fi
 
-MODEL_REPO=$DEPLOYMENT_NAME-repo
-MODEL_NAME=$DEPLOYMENT_NAME-model
-ENDPOINT_CONFIG_NAME=$DEPLOYMENT_NAME-endpoint-config
-ENDPOINT_NAME=$DEPLOYMENT_NAME-endpoint
+echo "Get resource names"
+read -r MODEL_REPO_NAME MODEL_NAME ENDPOINT_CONFIG_NAME ENDPOINT_NAME <<<$(python sagemaker/generate_resource_names.py $DEPLOYMENT_NAME)
 
-aws sagemaker delete-endpoint --endpoint-name $ENDPOINT_NAME | python get_json_value.py
-aws sagemaker delete-endpoint-config --endpoint-config-name $ENDPOINT_CONFIG_NAME | python get_json_value.py
-aws sagemaker delete-model --model-name $MODEL_NAME | python get_json_value.py
+aws sagemaker delete-endpoint --endpoint-name $ENDPOINT_NAME | python get_json_valule_from_return_struct.py
+aws sagemaker delete-endpoint-config --endpoint-config-name $ENDPOINT_CONFIG_NAME | python get_json_valule_from_return_struct.py
+aws sagemaker delete-model --model-name $MODEL_NAME | python get_json_valule_from_return_struct.py
 
 # Use this command to delete the ECR repository
-#aws ecr delete-repository --repository-name $MODEL_REPO --force
+#aws ecr delete-repository --repository-name $MODEL_REPO_NAME --force
