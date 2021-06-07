@@ -1,5 +1,5 @@
 {
-  "region": "us-west2",
+  "region": "us-west-2",
   "instance_type": "ml.t2.medium",
   "initial_instance_count": 1,
   "timeout": 60,
