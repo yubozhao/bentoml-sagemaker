@@ -8,6 +8,7 @@ if __name__ == '__main__':
     print(
         f'{configuration["region"]} '
         f'{configuration["timeout"]} '
+        f'{configuration["workers"]} '
         f'{configuration["instance_type"]} '
         f'{configuration["initial_instance_count"]} '
         f'{"true" if configuration["enable_data_capture"] == True else "false"} '

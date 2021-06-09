@@ -11,6 +11,7 @@ if __name__ == '__main__':
         "Environment": {
             "API_NAME": sys.argv[3],
             "BENTOML_GUNICORN_TIMEOUT": sys.argv[4],
+            "BENTOML_GUNICORN_NUM_OF_WORKERS": sys.argv[5]
         },
     }
     print(json.dumps(model_info))

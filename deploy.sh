@@ -8,13 +8,13 @@ then
 fi
 
 if [ "$#" -eq 3 ]; then
-  BENTO_BUNDLE_PATH=$1
-  DEPLOYMENT_NAME=$2
+  DEPLOYMENT_NAME=$1
+  BENTO_BUNDLE_PATH=$2
   API_NAME=$3
   CONFIG_JSON=sagemaker_config.json
 elif [ "$#" -eq 4 ]; then
-  BENTO_BUNDLE_PATH=$1
-  DEPLOYMENT_NAME=$2
+  DEPLOYMENT_NAME=$1
+  BENTO_BUNDLE_PATH=$2
   API_NAME=$3
   CONFIG_JSON=$4
 else
@@ -29,7 +29,7 @@ read -r MODEL_REPO_NAME MODEL_NAME ENDPOINT_CONFIG_NAME ENDPOINT_NAME <<<$(pytho
 
 # Get deployment configuration from configuration file
 echo "Get Sagemaker configuration from configuration file"
-read -r REGION TIMEOUT INSTANCE_TYPE INITIAL_INSTANCE_COUNT ENABLE_DATA_CAPTURE DATA_CAPTURE_S3_PREFIX DATA_CAPTURE_SAMPLE_PERCENT <<<$(python get_configuration_value.py $CONFIG_JSON)
+read -r REGION TIMEOUT NUM_OF_WORKERS INSTANCE_TYPE INITIAL_INSTANCE_COUNT ENABLE_DATA_CAPTURE DATA_CAPTURE_S3_PREFIX DATA_CAPTURE_SAMPLE_PERCENT <<<$(python get_configuration_value.py $CONFIG_JSON)
 
 # Generate Sagemaker deployable
 echo "Generate deployable for Sagemaker"
@@ -37,7 +37,6 @@ read -r DEPLOYABLE_PATH BENTO_NAME BENTO_VERSION <<<$(python ./sagemaker/generat
 
 # Get ARN and Account Id
 echo "Get ARN and account ID"
-# read -r ARN AWS_ACCOUNT_ID <<<$(aws sts get-caller-identity --region $REGION | python get_json_value_from_return_struct.py Arn Account)
 read -r ARN AWS_ACCOUNT_ID <<<$(python sagemaker/get_arn_from_aws.py)
 
 # Create ECR repository
@@ -60,7 +59,7 @@ docker push $IMAGE_TAG
 
 # Create Sagemaker model
 echo "Create Sagemaker model"
-MODEL_INFO=$(python ./sagemaker/generate_model_info.py $MODEL_NAME $IMAGE_TAG $API_NAME $TIMEOUT)
+MODEL_INFO=$(python ./sagemaker/generate_model_info.py $MODEL_NAME $IMAGE_TAG $API_NAME $TIMEOUT $NUM_OF_WORKERS)
 read -r MODEL_ARN <<<$(aws sagemaker create-model --model-name $MODEL_NAME --primary-container $MODEL_INFO --execution-role-arn $ARN | python get_json_value_from_return_struct.py ModelArn)
 
 # Create Sagemaker endpoint config
